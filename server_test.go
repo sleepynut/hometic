@@ -8,11 +8,6 @@ import (
 	"testing"
 )
 
-type Pair struct {
-	DeviceID int
-	UserID   int
-}
-
 func TestCreatePairDevice(t *testing.T) {
 	payload := new(bytes.Buffer)
 	json.NewEncoder(payload).Encode(Pair{DeviceID: 1234, UserID: 4433})

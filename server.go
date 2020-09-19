@@ -44,7 +44,7 @@ func PairDeviceHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	defer r.Body.Close()
-	fmt.Println("pair: %#v\n", p)
+	fmt.Printf("pair: %#v\n", p)
 
 	// w.Write([]byte(`{"status":"active"}`))
 }
