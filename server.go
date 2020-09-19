@@ -1,6 +1,7 @@
 package main
 
 import (
+	"database/sql"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -45,6 +46,21 @@ func PairDeviceHandler(w http.ResponseWriter, r *http.Request) {
 
 	defer r.Body.Close()
 	fmt.Printf("pair: %#v\n", p)
+
+	// open database connection
+	db, err := sql.Open("postgres", os.Getenv("DATABASE_URL"))
+	if err != nil {
+		log.Fatal("connect to database error", err)
+	}
+	defer db.Close()
+
+	// insert p into table pairs
+	_, err = db.Exec("INSERT INTO pairs VALUES ($1,$2);", p.DeviceID, p.UserID)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(err.Error())
+		return
+	}
 
 	w.Write([]byte(`{"status":"active"}`))
 }
