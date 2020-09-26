@@ -70,11 +70,13 @@ func PairDeviceHandler(device Device) http.HandlerFunc {
 
 		err = device.Pair(p)
 		if err != nil {
+			w.Header().Set("content-type", "application/json")
 			w.WriteHeader(http.StatusInternalServerError)
 			json.NewEncoder(w).Encode(err.Error())
 			return
 		}
 
+		w.Header().Set("content-type", "application/json")
 		w.Write([]byte(`{"status":"active"}`))
 	}
 }
