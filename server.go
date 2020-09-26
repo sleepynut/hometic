@@ -327,7 +327,7 @@ import (
 	"os"
 
 	"github.com/gorilla/mux"
-	"github.com/sleepynut/Go-Practical/gosep/hometic/logger"
+	"github.com/sleepynut/hometic/logger"
 
 	_ "github.com/lib/pq"
 )
