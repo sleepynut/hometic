@@ -60,6 +60,7 @@ func PairDeviceHandler(device Device) http.HandlerFunc {
 		var p Pair
 		err := json.NewDecoder(r.Body).Decode(&p)
 		if err != nil {
+			w.Header().Set("content-type", "application/json")
 			w.WriteHeader(http.StatusBadRequest)
 			json.NewEncoder(w).Encode(err.Error())
 			return
