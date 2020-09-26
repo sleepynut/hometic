@@ -341,6 +341,13 @@ func main() {
 	}
 
 	r := mux.NewRouter()
+	r.Use(func(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			l := zap.NewExample()
+			l = l.With(zap.Namespace("hometic"), zap.String("I'm", "gopher"))
+			l.Info("pair-device")
+		})
+	})
 	r.Handle("/pair-device", PairDeviceHandler(NewCreatePairDevice(db))).Methods(http.MethodPost)
 
 	addr := fmt.Sprintf("0.0.0.0:%s", os.Getenv("PORT"))
@@ -362,10 +369,6 @@ type Pair struct {
 
 func PairDeviceHandler(device Device) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		l := zap.NewExample()
-		l = l.With(zap.Namespace("hometic"), zap.String("I'm", "gopher"))
-		l.Info("pair-device")
-
 		var p Pair
 		err := json.NewDecoder(r.Body).Decode(&p)
 		if err != nil {
